@@ -123,10 +123,34 @@ void inserting_BST(Tree*& t, int key) {
 		inserting_BST(t->right, key);
 	}
 }
+int searching(int* arr, int start, int end, int key) {
+	for (int i = start; i < end; i++) {
+		if (arr[i] == key)
+			return i;
+	}
+	return -1;
+}
+Tree* create_BST_from_PreAndIn(int preorder[], int inorder[], int inStart, int inEnd) {
+	if (inStart > inEnd)
+		return nullptr;
+	static int pre_index = 0;
+	Tree* n_node = new Tree(preorder[pre_index++]);
+	if (inStart == inEnd)
+		return n_node;
+	int in_index = searching(inorder, inStart, inEnd, n_node->get_data());
+	n_node->left = create_BST_from_PreAndIn(preorder, inorder, inStart, in_index - 1);
+	n_node->right = create_BST_from_PreAndIn(preorder, inorder, in_index + 1, inEnd);
+	return n_node;
+}
 
-
+void dis(int* arr, int size) {
+	for (int i = 0; i < size; i++) {
+		cout << arr[i] << " ";
+	}
+}
 int main() {
-	
+	int arr[5]{ 1,2,3,4,5 };
+	dis(&arr[2], 3);
 
 	return 0;
 }
