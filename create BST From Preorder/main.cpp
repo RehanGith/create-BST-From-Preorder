@@ -130,6 +130,41 @@ int searching(int* arr, int start, int end, int key) {
 	}
 	return -1;
 }
+
+void deletion(Tree*& node, int key) {
+	if (node == nullptr)
+		return;
+	if (node->data == key) {
+		Tree* nnode = nullptr;
+		if (node->left) {
+			nnode = node->left;
+			while (nnode) {
+				nnode = nnode->right;
+			}
+		}
+		else if (node->right) {
+			Tree* nnode = node->right;
+			while (nnode) {
+				nnode = nnode->left;
+			}
+		}
+		if (nnode) {
+			nnode->left = node->left;
+			nnode->right = node->right;
+			delete node;
+		}
+		else {
+			nnode = node;
+			delete node;
+			nnode = nullptr;
+		}
+	}
+	else if (node->data < key)
+		deletion(node->right, key);
+	else
+		deletion(node->left, key);
+}
+
 Tree* create_BST_from_PreAndIn(int preorder[], int inorder[], int inStart, int inEnd) {
 	if (inStart > inEnd)
 		return nullptr;
@@ -157,10 +192,11 @@ void dis(int* arr, int size) {
 	}
 }
 int main() {
-	int arr[6]{ 10,5,1,7,40, 50};
+	int arr[9]{ 30, 20, 10, 25, 40, 35, 45, 42, 43};
 	Tree* head = nullptr;
 	int n = 0;
-	head = createBSTpreorder(arr, n, 50, 6);
+	head = createBSTpreorder(arr, n, 50, 9);
+	deletion(head, 30);
 	display_inorder(head);
 	return 0;
 }
