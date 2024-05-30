@@ -2,8 +2,8 @@
 #include <stack>
 using namespace std;
 class Tree {
-	int data;
 public:
+	int data;
 	Tree* left;
 	Tree* right;
 	Tree(int d = 0, Tree* l = nullptr, Tree* r = nullptr) : data(d), left(l), right(r) {
@@ -142,15 +142,25 @@ Tree* create_BST_from_PreAndIn(int preorder[], int inorder[], int inStart, int i
 	n_node->right = create_BST_from_PreAndIn(preorder, inorder, in_index + 1, inEnd);
 	return n_node;
 }
-
+Tree* createBSTpreorder(int preorder[], int &pre_index, int max, int n) {
+	Tree* root = nullptr;
+	if (preorder[pre_index] > max || pre_index >= n)
+		return nullptr;
+	root = new Tree(preorder[pre_index++]);
+	root->left = createBSTpreorder(preorder, pre_index, root->data, n);
+	root->right = createBSTpreorder(preorder, pre_index, max, n);
+	return root;
+}
 void dis(int* arr, int size) {
 	for (int i = 0; i < size; i++) {
 		cout << arr[i] << " ";
 	}
 }
 int main() {
-	int arr[5]{ 1,2,3,4,5 };
-	dis(&arr[2], 3);
-
+	int arr[6]{ 10,5,1,7,40, 50};
+	Tree* head = nullptr;
+	int n = 0;
+	head = createBSTpreorder(arr, n, 50, 6);
+	display_inorder(head);
 	return 0;
 }
